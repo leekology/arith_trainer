@@ -125,23 +125,23 @@
             //                           row 3 is pixel 1 A channel (Alpha, transparency)        
 
             // Iterate through the array and get only the Aplha channel, which is 255 for black and 0 for white
-            var imageArrayOriginal = [];
-            for (var i = 0; i<160000; i++){
-                imageArrayOriginal[i] = imageDataOriginal.data[(i*4)+3];            
-            }
+            
+            var n_width = imageDataOriginal.width;
+            var n_height = imageDataOriginal.height;
+
             
             // Separate different numbers by grouping adjacent pixels            
             var k = 1;  
             window['arrayN' + k] = [];
-            for (var row = 0; row<400; row++){            
-                for (var column = 0; column < 400; column++){
-                    if (imageDataOriginal.data[(row*400 + column)*4+3] > 0){
+            for (var row = 0; row<n_height; row++){            
+                for (var column = 0; column < n_width; column++){
+                    if (imageDataOriginal.data[(row*n_width + column)*4+3] > 0){
                         
                         // Get the adjacent pixels if stroke is continuous and assign it to an array
                         var nextColumn = 1;
-                        window['arrayN' + k].push(row*400 + column);
-                        while ( imageDataOriginal.data[(row*400 + column + nextColumn)*4+3] != 0){
-                            window['arrayN' + k].push(row*400 + column + nextColumn);
+                        window['arrayN' + k].push(row*n_width + column);
+                        while ( imageDataOriginal.data[(row*n_width + column + nextColumn)*4+3] != 0){
+                            window['arrayN' + k].push(row*n_width + column + nextColumn);
                             nextColumn++;
                         }                         
                        
@@ -152,7 +152,7 @@
                  
                         for (var l = 1; l <= k; l++){
                             for (var element = 0; element < window['arrayN' + k].length; element++){
-                                arrayAdjusted[element] = window['arrayN' + k][element] - 400;    
+                                arrayAdjusted[element] = window['arrayN' + k][element] - n_width;    
                                 if (window['arrayN' + l].includes(arrayAdjusted[element])){
                                     arrayToMerge.push(l);
                                     arrayToMerge.push(k);    
@@ -298,7 +298,7 @@
         }
         
         #canvasCont2{
-            visibility: hidden;
+            /*visibility: hidden;*/
         }
            
         #label{
@@ -365,7 +365,7 @@
   <div id="wrapper">
       <div id="div_draw" >
           <p id="label">Draw here:</p>
-          <canvas id= "canvasInput" width="400" height="400">Your browser does not support the HTML5 canvas tag.</canvas>
+          <canvas id= "canvasInput" width="400" height="300">Your browser does not support the HTML5 canvas tag.</canvas>
       </div>
       <div id = "div_answer">
           <p id="label">Results:</p>
