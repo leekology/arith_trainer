@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Handwritten Digits Recognition - Wilian Osaku</title>
 
-    <script type="text/javascript" src="nn.js"></script>
+    <script type="text/javascript" src="static/nn.js"></script>
     
-    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="static/main.js"></script>
     
     <style>
         body{
@@ -26,7 +26,7 @@
             background-color: #ffffff;;
         }
         
-        #canvasCont2{
+        #canvasIndImage{
             /*visibility: hidden;*/
             /*display: none;*/
         }
@@ -84,6 +84,10 @@
         #div_answer {     
             overflow: hidden;
         }
+
+        #questionDiv, #answerDiv {
+          font: 5em HeiTi; display: inline;
+        }
         
         
     </style>
@@ -92,22 +96,15 @@
 <body onload="startup()" style="height:100%;width:100%;">
 
   <div id="wrapper">
-      <div id="div_draw" >
-          <p id="label">Draw here:</p>
-          <!-- <canvas id= "canvasInput" width="400" height="300">Your browser does not support the HTML5 canvas tag.</canvas> -->
-      </div>
-      <div id = "div_answer">
-          <p id="label">Results:</p>
-          <canvas id= "canvasAnswer" width="400" height="400"></canvas><br>
-      </div>
-
-    <button id="clearBtn" class="button" size="30">Clear</button>
+    <div id="questionDiv"></div><div id="answerDiv"></div>
   </div>
+  
 
+  <button onclick="hitGo()" id="Go" class="button" size="30">Go</button>
 
-  <canvas id= "canvasCont2" width="400" height="400"></canvas>   
+  <canvas id= "canvasIndImage" width="400" height="400" style="width:1px;height:1px"></canvas>   
 
-  <canvas id= "canvasInput" width="400" height="400" style="top:0;left:0;z-index:auto;position:absolute;">Your browser does not support the HTML5 canvas tag.</canvas>
+  <canvas id= "canvasInput" width="400" height="400" style="z-index:auto;position:absolute;">Your browser does not support the HTML5 canvas tag.</canvas>
 
 
 </body>    

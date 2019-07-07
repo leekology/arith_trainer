@@ -1,18 +1,16 @@
 
-var contextInput;
-var contextAnswer;  // contextAnswer   
+var contextInput; 
 var clickX = [], clickY = [], clickDrag = [];
 var paint;
 var arrayN = [];
 
+var questionN = [];
+var answerN = []
+
 function startup(){
-    clearBtn.addEventListener('click', clearCanvas);
 
     // var canvasInput = document.getElementById("canvasInput");
     contextInput = canvasInput.getContext("2d");  
-    
-    // canvasAnswer = document.getElementById("canvasAnswer");
-    contextAnswer = canvasAnswer.getContext("2d");
     
     canvasInput.addEventListener("mousedown", function(e){
         paint = true;
@@ -90,7 +88,6 @@ function draw(){
 
 function clearCanvas(){
     contextInput.clearRect(0, 0, contextInput.canvas.width, contextInput.canvas.height);    
-    contextAnswer.clearRect(0, 0, contextAnswer.canvas.width, contextAnswer.canvas.height);    
     clickX = new Array();
     clickY = new Array();
     clickDrag = new Array(); 
@@ -193,13 +190,12 @@ function processIndividualImage(arrayToProcess){
     *** PROCESS IMAGE  *** 
     **********************/   
     
-    // Use hidden canvas to put indiviual digit
-    var canvasIndImage = document.getElementById("canvasCont2");      
+    // Use hidden canvas to put indiviual digit    
     var contextIndImg = canvasIndImage.getContext("2d");
     contextIndImg.clearRect(0, 0, contextIndImg.canvas.width, contextIndImg.canvas.height);
 
     // Insert array digit into the image data; get columns and rows; put image on canvas
-    var imageDataCopy = contextIndImg.getImageData(0,0,canvasIndImage.width,canvasIndImage.height);
+    var imageDataCopy = contextIndImg.getImageData(0,0,contextIndImg.canvas.width,contextIndImg.canvas.height);
     var columnArray = [];
     var rowArray = [];
     for (var j = 0; j < arrayToProcess.length ; j++){        
@@ -245,7 +241,7 @@ function processIndividualImage(arrayToProcess){
     canvasHidden.height = 28;
     var contextHidden = canvasHidden.getContext("2d");
     contextHidden.clearRect(0, 0, contextHidden.canvas.width, contextHidden.canvas.height);
-    contextHidden.drawImage(canvasIndImage, minX, minY, originalWidth, originalHeight, newXstart, newYstart, newWidth, newHeight); 
+    contextHidden.drawImage(contextIndImg.canvas, minX, minY, originalWidth, originalHeight, newXstart, newYstart, newWidth, newHeight); 
 
     
     // Get the Image Data from the new scaled, centered, 28 x 28 pixel image
@@ -258,11 +254,29 @@ function processIndividualImage(arrayToProcess){
 
     // actual OCR
     answer = nn(processedImage)
-    
-    // Draw answer
-    contextAnswer.clearRect(minX, minY, originalWidth, originalHeight);            
-    contextAnswer.font = originalHeight + "pt Times New Roman";          
-    contextAnswer.fillText(answer,minX,maxY);            
+    console.log(answer);
+    answerN.splice(0, answerN.length);
+    answerN[0] = answer;
+    answerDiv.innerText = answerN.reduce((x, y) => x.toString()+y.toString());
 }   
 
 
+function newQuestion(max) {
+    var max = max || 9
+    questionN[0] = Math.ceil(Math.random() * max);
+    questionN[1] = Math.ceil(Math.random() * max);
+    return questionN;
+}
+
+function hitGo() {
+    answerDiv.innerText = '';
+    questionDiv.innerText = newQuestion().join(' + ') + ' = '
+    canvasInput.style.top = questionDiv.style.top;
+    canvasInput.style.left = questionDiv.style.left + questionDiv.offsetWidth;
+    clearCanvas();
+}
+
+function checkAnswer(answer){
+    var ans = questionN.reduce((x,y) => x+y);
+    var val = parseInt(answerDiv.innerText, 10)
+}
