@@ -9,19 +9,19 @@
     
     <script type="text/javascript">
         
-        var clearBtn;
-        var canvas, context;
-        var canvasAnswer, contextAnswer;        
+        // var clearBtn;
+        var contextInput;
+        var contextAnswer;  // contextAnswer   
         var clickX = new Array(), clickY = new Array(), clickDrag = new Array();
         var paint;
 
         function startup(){
-            clearBtn = document.getElementById('clr').addEventListener('click', clearCanvas);
+            // clearBtn = document.getElementById('clr').addEventListener('click', clearCanvas);
 
-            canvas = document.getElementById("canvasCont");
-            context = canvas.getContext("2d");  
+            // var canvasInput = document.getElementById("canvasInput");
+            contextInput = canvasInput.getContext("2d");  
             
-            canvasAnswer = document.getElementById("canvasAnswer");
+            // canvasAnswer = document.getElementById("canvasAnswer");
             contextAnswer = canvasAnswer.getContext("2d");
             
             canvas.addEventListener("mousedown", function(e){
@@ -83,25 +83,25 @@
 
 
         function draw(){
-            context.lineJoin = "round";
-            context.lineWidth = 15;
+            contextInput.lineJoin = "round";
+            contextInput.lineWidth = 15;
             for(var i=0; i < clickX.length; i++) {      
-                context.beginPath();
+                contextInput.beginPath();
                 if(clickDrag[i] && i){
-                    context.moveTo(clickX[i-1], clickY[i-1]);
+                    contextInput.moveTo(clickX[i-1], clickY[i-1]);
                 }
                 else{
-                    context.moveTo(clickX[i]-1, clickY[i]);
+                    contextInput.moveTo(clickX[i]-1, clickY[i]);
                 }
-                context.lineTo(clickX[i], clickY[i]);
-                context.closePath();
-                context.stroke();
+                contextInput.lineTo(clickX[i], clickY[i]);
+                contextInput.closePath();
+                contextInput.stroke();
             }
         }
        
 
         function clearCanvas(){
-            context.clearRect(0, 0, canvas.width, canvas.height);    
+            contextInput.clearRect(0, 0, canvas.width, canvas.height);    
             contextAnswer.clearRect(0, 0, canvasAnswer.width, canvasAnswer.height);    
             clickX = new Array();
             clickY = new Array();
@@ -285,7 +285,7 @@
             background-color: #f2f2f2;
         }
   
-        #canvasCont{
+        #canvasInput{
             border:1px solid #000000;
             border-radius:4px;
             background-color: #ffffff;
@@ -359,22 +359,23 @@
     </style>
 </head>
     
-<body onload="startup()">
-    <div id="wrapper">
-        <div id="div_draw" >
-            <p id="label">Draw here:</p>         
-            <canvas id= "canvasCont" width="400" height="400">Your browser does not support the HTML5 canvas tag.</canvas>  
-        </div>
-        <div id = "div_answer">
-            <p id="label">Results:</p>  
-            <canvas id= "canvasAnswer" width="400" height="400"></canvas><br>
-        </div>
-        <button id="clr" class="button" size="30">Clear</button>
-    </div>
+<body onload="startup()" style="height:100%;width:100%;">
     
+  <div id="wrapper">
+      <div id="div_draw" >
+          <p id="label">Draw here:</p>  
+      </div>
+      <div id = "div_answer">
+          <p id="label">Results:</p>  
+          <canvas id= "canvasAnswer" width="400" height="400"></canvas><br>
+      </div>
+      <button id="clearBtn" class="button" size="30">Clear</button>
+  </div>
 
-    <canvas id= "canvasCont2" width="400" height="400"></canvas>   
-    
+
+  <canvas id= "canvasCont2" width="400" height="400"></canvas>   
+  <canvas id= "canvasInput" style="width:100%;height:100%;z-index: 1">Your browser does not support the HTML5 canvas tag.</canvas>
+
 
 
 </body>    
