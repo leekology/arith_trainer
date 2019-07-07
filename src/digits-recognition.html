@@ -13,6 +13,7 @@
         var contextAnswer;  // contextAnswer   
         var clickX = [], clickY = [], clickDrag = [];
         var paint;
+        var arrayN = [];
 
         function startup(){
             clearBtn.addEventListener('click', clearCanvas);
@@ -81,7 +82,7 @@
 
         function draw(){
             contextInput.lineJoin = "round";
-            contextInput.lineWidth = 15;
+            contextInput.lineWidth = 5;
             for(var i=0; i < clickX.length; i++) {      
                 contextInput.beginPath();
                 if(clickDrag[i] && i){
@@ -98,8 +99,8 @@
        
 
         function clearCanvas(){
-            contextInput.clearRect(0, 0, contextInput.canvas.clientWidth, contextInput.canvas.clientHeight);    
-            contextAnswer.clearRect(0, 0, contextAnswer.canvas.clientWidth, contextAnswer.canvas.clientHeight);    
+            contextInput.clearRect(0, 0, contextInput.canvas.width, contextInput.canvas.height);    
+            contextAnswer.clearRect(0, 0, contextAnswer.canvas.width, contextAnswer.canvas.height);    
             clickX = new Array();
             clickY = new Array();
             clickDrag = new Array(); 
@@ -113,7 +114,7 @@
             *****************************/  
                  
             // Get ImageData to transform the image to array of pixels
-            var imageDataOriginal = contextInput.getImageData(0, 0, canvasInput.clientWidth, canvasInput.clientHeight);
+            var imageDataOriginal = contextInput.getImageData(0, 0, contextInput.canvas.width, contextInput.canvas.height);
 
             // The Image contains 160,000 (400 X 400) pixels.
             // The ImageDataOriginal contains 160,000 * 4 rows.
@@ -130,16 +131,16 @@
             
             // Separate different numbers by grouping adjacent pixels            
             var k = 1;  
-            window['arrayN' + k] = [];
+            arrayN[k] = [];
             for (var row = 0; row<n_height; row++){            
                 for (var column = 0; column < n_width; column++){
                     if (imageDataOriginal.data[(row*n_width + column)*4+3] > 0){
                         
                         // Get the adjacent pixels if stroke is continuous and assign it to an array
                         var nextColumn = 1;
-                        window['arrayN' + k].push(row*n_width + column);
+                        arrayN[k].push(row*n_width + column);
                         while ( imageDataOriginal.data[(row*n_width + column + nextColumn)*4+3] != 0){
-                            window['arrayN' + k].push(row*n_width + column + nextColumn);
+                            arrayN[k].push(row*n_width + column + nextColumn);
                             nextColumn++;
                         }                         
                        
@@ -149,9 +150,9 @@
                         var arrayToMerge = [];
                  
                         for (var l = 1; l <= k; l++){
-                            for (var element = 0; element < window['arrayN' + k].length; element++){
-                                arrayAdjusted[element] = window['arrayN' + k][element] - n_width;    
-                                if (window['arrayN' + l].includes(arrayAdjusted[element])){
+                            for (var element = 0; element < arrayN[k].length; element++){
+                                arrayAdjusted[element] = arrayN[k][element] - n_width;    
+                                if (arrayN[l].includes(arrayAdjusted[element])){
                                     arrayToMerge.push(l);
                                     arrayToMerge.push(k);    
                                     break;
@@ -168,13 +169,13 @@
                         
                         // Merge adjacent arrays into the same digit; and clear that array
                         for (var f = 1; f < arrayToMerge.length ; f++){
-                            window['arrayN' + arrayToMerge[0]] = window['arrayN' + arrayToMerge[0]].concat(window['arrayN' + arrayToMerge[f]]);
-                            window['arrayN' + arrayToMerge[f]] = [];
+                            arrayN[arrayToMerge[0]] = arrayN[arrayToMerge[0]].concat(arrayN[arrayToMerge[f]]);
+                            arrayN[arrayToMerge[f]] = [];
                         }
 
                         // Increase count k, initiate arrayNk, move to the correct column
                         k++;
-                        window['arrayN' + k] = [];
+                        arrayN[k] = [];
                         column = column + nextColumn-1;
                     }
                 }
@@ -184,14 +185,14 @@
             // Check which arrays are valid digits (length > 0); those that are length 0 are temporary arrays
             var validaArrays = [];
             for (var i = 1;  i < k; i++){
-                if (window['arrayN' + i].length > 0){
+                if (arrayN[i].length > 0){
                     validaArrays.push(i);
                 }
             }
             
             //// Process Neural Network for each digit
             for (var i = 0; i < validaArrays.length; i++){
-                processIndividualImage(window['arrayN' + validaArrays[i]]);
+                processIndividualImage(arrayN[validaArrays[i]]);
             }
         };
         
@@ -376,7 +377,7 @@
 
   <canvas id= "canvasCont2" width="400" height="400"></canvas>   
 
-  <canvas id= "canvasInput" width="100%" height="100%" style="wid1th:100%;he1ight:100%;top:0;left:0;z-index:auto;position:absolute;">Your browser does not support the HTML5 canvas tag.</canvas>
+  <canvas id= "canvasInput" width="400" height="400" style="top:0;left:0;z-index:auto;position:absolute;">Your browser does not support the HTML5 canvas tag.</canvas>
 
 
 </body>    
