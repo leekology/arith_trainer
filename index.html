@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Handwritten Digits Recognition - Wilian Osaku</title>
+
+    <script type="text/javascript" src="nn.js"></script>
+    
+    <script type="text/javascript" src="main.js"></script>
+    
+    <style>
+        body{
+            background-color: #f2f2f2;
+        }
+  
+        #canvasInput{
+            border:1px solid #000000;
+            border-radius:4px;
+            background-color: #ffffff;
+        }
+        
+        #canvasAnswer{
+            border:1px solid #000000;
+            border-radius:4px;
+            background-color: #ffffff;;
+        }
+        
+        #canvasCont2{
+            /*visibility: hidden;*/
+            /*display: none;*/
+        }
+           
+        #label{
+             font-size: 1.5em;
+        }
+
+        .button {
+            position: relative;
+            background-color: #3F51B5;
+            border-radius: 4px;
+            border: none;
+            font-size: 18px;
+            color: #FFFFFF;
+            padding: 10px;
+            width: 180px;
+            text-align: center;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .button:after {
+            content: "";
+            background: #f1f1f1;
+            display: block;
+            position: absolute;
+            padding-top: 300%;
+            padding-left: 350%;
+            margin-left: -20px;
+            margin-top: -120%;
+            opacity: 0;
+            transition: all 0.8s
+        }
+        .button:active:after {
+            padding: 0;
+            margin: 0;
+            opacity: 1;
+            transition: 0s
+        }
+        
+        #wrapper { 
+            width:850px;
+            text-align: center;
+            overflow: auto; 
+        }
+        
+        #div_draw {
+            width: 420px;
+            float:left;
+        }
+        
+        #div_answer {     
+            overflow: hidden;
+        }
+        
+        
+    </style>
+</head>
+
+<body onload="startup()" style="height:100%;width:100%;">
+
+  <div id="wrapper">
+      <div id="div_draw" >
+          <p id="label">Draw here:</p>
+          <!-- <canvas id= "canvasInput" width="400" height="300">Your browser does not support the HTML5 canvas tag.</canvas> -->
+      </div>
+      <div id = "div_answer">
+          <p id="label">Results:</p>
+          <canvas id= "canvasAnswer" width="400" height="400"></canvas><br>
+      </div>
+
+    <button id="clearBtn" class="button" size="30">Clear</button>
+  </div>
+
+
+  <canvas id= "canvasCont2" width="400" height="400"></canvas>   
+
+  <canvas id= "canvasInput" width="400" height="400" style="top:0;left:0;z-index:auto;position:absolute;">Your browser does not support the HTML5 canvas tag.</canvas>
+
+
+</body>    
+</html>
