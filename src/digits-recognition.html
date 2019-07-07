@@ -9,14 +9,13 @@
     
     <script type="text/javascript">
         
-        // var clearBtn;
         var contextInput;
         var contextAnswer;  // contextAnswer   
         var clickX = new Array(), clickY = new Array(), clickDrag = new Array();
         var paint;
 
         function startup(){
-            // clearBtn = document.getElementById('clr').addEventListener('click', clearCanvas);
+            clearBtn.addEventListener('click', clearCanvas);
 
             // var canvasInput = document.getElementById("canvasInput");
             contextInput = canvasInput.getContext("2d");  
@@ -24,7 +23,7 @@
             // canvasAnswer = document.getElementById("canvasAnswer");
             contextAnswer = canvasAnswer.getContext("2d");
             
-            canvas.addEventListener("mousedown", function(e){
+            canvasInput.addEventListener("mousedown", function(e){
                 var mouseX = e.pageX - this.offsetLeft;
                 var mouseY = e.pageY - this.offsetTop;
                 paint = true;
@@ -32,23 +31,23 @@
                 draw();
             });
 
-            canvas.addEventListener("mousemove", function(e){
+            canvasInput.addEventListener("mousemove", function(e){
                 if(paint){
                     addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
                     draw();
                 }
             });
 
-            canvas.addEventListener("mouseup", function(e){
+            canvasInput.addEventListener("mouseup", function(e){
                 paint = false;
                 predict();
             });
 
-            canvas.addEventListener("mouseleave", function(e){
+            canvasInput.addEventListener("mouseleave", function(e){
                 paint = false;
             }); 
             
-            canvas.addEventListener('touchstart', function(e){                
+            canvasInput.addEventListener('touchstart', function(e){                
                 if (e.touches.length == 1){ 
                     var touch = e.touches[0];         
                     paint = true;
@@ -57,12 +56,12 @@
                 }
             });
             
-            canvas.addEventListener('touchend', function(e){
+            canvasInput.addEventListener('touchend', function(e){
                 paint = false;
                 predict();
             });
             
-            canvas.addEventListener('touchmove', function(e){
+            canvasInput.addEventListener('touchmove', function(e){
                 if(paint){
                     if (e.touches.length == 1) { 
                         var touch = e.touches[0];
@@ -101,7 +100,7 @@
        
 
         function clearCanvas(){
-            contextInput.clearRect(0, 0, canvas.width, canvas.height);    
+            contextInput.clearRect(0, 0, canvasInput.width, canvasInput.height);    
             contextAnswer.clearRect(0, 0, canvasAnswer.width, canvasAnswer.height);    
             clickX = new Array();
             clickY = new Array();
@@ -116,7 +115,7 @@
             *****************************/  
                  
             // Get ImageData to transform the image to array of pixels
-            var imageDataOriginal = context.getImageData(0, 0, canvas.width, canvas.height);
+            var imageDataOriginal = contextInput.getImageData(0, 0, canvasInput.width, canvasInput.height);
 
             // The Image contains 160,000 (400 X 400) pixels.
             // The ImageDataOriginal contains 160,000 * 4 rows.
@@ -269,6 +268,7 @@
             }
             
             answer = nn(processedImage)
+            console.log(answer)
             
             // Draw answer
             contextAnswer.clearRect(minX, minY, originalWidth, originalHeight);            
@@ -361,20 +361,22 @@
     
 <body onload="startup()" style="height:100%;width:100%;">
     
+<body onload="startup()">
   <div id="wrapper">
       <div id="div_draw" >
-          <p id="label">Draw here:</p>  
+          <p id="label">Draw here:</p>
+          <canvas id= "canvasInput" width="400" height="400">Your browser does not support the HTML5 canvas tag.</canvas>
       </div>
       <div id = "div_answer">
-          <p id="label">Results:</p>  
+          <p id="label">Results:</p>
           <canvas id= "canvasAnswer" width="400" height="400"></canvas><br>
       </div>
-      <button id="clearBtn" class="button" size="30">Clear</button>
+
+    <button id="clearBtn" class="button" size="30">Clear</button>
   </div>
 
 
   <canvas id= "canvasCont2" width="400" height="400"></canvas>   
-  <canvas id= "canvasInput" style="width:100%;height:100%;z-index: 1">Your browser does not support the HTML5 canvas tag.</canvas>
 
 
 
